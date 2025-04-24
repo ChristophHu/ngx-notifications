@@ -2,10 +2,11 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { TemplateComponent } from './template/template.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
 import { provideHttpClient } from '@angular/common/http';
 import { provideGithubPagesDemo } from '@christophhu/ngx-github-pages-demo';
-import { provideNotifications } from '../../../ngx-notifications/src/public-api';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
+// import { provideNotifications } from '../../../ngx-notifications/src/public-api';
+import { provideNotifications } from '@christophhu/ngx-notifications';
 
 export const appConfig: ApplicationConfig = {
   providers: [

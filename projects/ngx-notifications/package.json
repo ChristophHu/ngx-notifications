@@ -1,12 +1,35 @@
 {
-  "name": "ngx-notifications",
-  "version": "0.0.1",
+  "name": "@christophhu/ngx-notifications",
+  "version": "19.2.1",
+  "description": "An Angular notifications library to create beautiful notifications with animations.",
+  "license": "MIT",
+  "author": {
+    "name": "Christoph Huschenhoefer",
+    "email": "christoph@nxt.codes"
+  },
+  "keywords": [
+    "angular",
+    "notifications",
+    "animations",
+    "npm"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christophhu/ngx-notifications.git"
+  },
+  "bugs": {
+    "url": "https://github.com/christophhu/ngx-notifications/issues"
+  },
+  "homepage": "https://github.com/christophhu/ngx-notifications#readme",
   "peerDependencies": {
     "@angular/common": "^19.2.0",
     "@angular/core": "^19.2.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
-  },
-  "sideEffects": false
+  }
 }

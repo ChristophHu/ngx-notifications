@@ -1,6 +1,7 @@
 import { CommonModule, JsonPipe } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { NotificationComponent, NotificationsService, NotificationType } from '../../../../ngx-notifications/src/public-api';
+// import { NotificationComponent, NotificationsService, NotificationType } from '../../../../ngx-notifications/src/public-api';
+import { NotificationComponent, NotificationType, NotificationsService } from '@christophhu/ngx-notifications';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -49,7 +50,7 @@ export class TemplateComponent {
 
   request() {
     this._notificationsService.open({ type: 'request', header: 'Event beendet', message: 'Möchten Sie einen neuen Event vorbereiten (ja) oder den angezeigten Event ansehen (nein)? Dann haben Sie die Möglichkeit hier. Hier soll nun auch getestet werden ob die Notification frei skaliert.', autoClose: false })?.subscribe((data: any) => { 
-      if (data == true) console.log('yes')
+      if (data) console.log(data)
     })
   }
 
@@ -61,7 +62,7 @@ export class TemplateComponent {
 
   warning() {
     this._notificationsService.open({ type: 'warning', header: 'Achtung', message: 'Es muss folgendes beachtet werden:', autoClose: false })?.subscribe((data: any) => { 
-      if (data == true) console.log('yes')
+      if (data) console.log(data)
     })
   }
 }

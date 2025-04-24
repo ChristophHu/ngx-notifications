@@ -23,56 +23,61 @@ npm i @christophhu/ngx-notifications
 ```
 
 ## Use
-### With default toggle
 ```html
-<log-mode></log-mode>
-```
-
-### With custom toggle
-```html
-<log-mode>
-  <input type="checkbox" name="log" id="log" (change)="toggleLog()" [checked]="isLogActivated()" class="cursor-pointer">
-</log-mode>
+<notification></notification>
 ```
 
 ```typescript
-import { LogDecorator, LogModeComponent, LogService } from '@christophhu/ngx-log-mode'
+import { NotificationComponent, NotificationType, NotificationsService } from '@christophhu/ngx-notifications';
 
 @Component({
   ...
   imports: [
-    LogModeComponent
+    NotificationComponent
   ],
   providers: [
     LogService
   ]
 })
 export class TestComponent {
-  private _logService: LogService
-  
-  constructor(@Inject(LogService) _logService: LogService) {
-    this._logService = _logService
+  constructor(private _notificationsService: NotificationsService) {}
+
+  error() {
+    this._notificationsService.open({ type: 'error', header: 'Fehler', message: 'Es ist ein Fehler aufgetreten', autoClose: true })?.subscribe((data: any) => { 
+      // if (data == true) alert('yes')
+    })
   }
 
-  // Log-Decorator to log the function call and the result with timestamp
-  @LogDecorator({ logType: 'info', input: false, output: false, timestamp: true })
-
-  toggleLog() {
-    this._logService.toggleLogActivate()
-  }
-  isLogActivated(): boolean {
-    return this._logService.isLogActivated()
+  request() {
+    this._notificationsService.open({ type: 'request', header: 'Event beendet', message: 'Möchten Sie einen neuen Event vorbereiten (ja) oder den angezeigten Event ansehen (nein)? Dann haben Sie die Möglichkeit hier. Hier soll nun auch getestet werden ob die Notification frei skaliert.', autoClose: false })?.subscribe((data: any) => { 
+      if (data) console.log(data)
+    })
   }
 
-  logThis(param: string): void {
-    LogService.log('TemplateComponent', 'logThis()', ' param: ' + param)
+  success() {
+    this._notificationsService.open({ type: 'success', header: 'Erfolg', message: 'Erfolgreich abgeschlossen', autoClose: false })?.subscribe((data: any) => { 
+      // if (data == true) alert('yes')
+    })
   }
-  logThis() {
-    LogService.debug('TemplateComponent', 'logDebug()')
-    LogService.info('TemplateComponent', 'logInfo()')
-    LogService.warn('TemplateComponent', 'logWarn()')
-    LogService.error('TemplateComponent', 'logError()')
-    LogService.fatal('TemplateComponent', 'logFatal()')
+
+  warning() {
+    this._notificationsService.open({ type: 'warning', header: 'Achtung', message: 'Es muss folgendes beachtet werden:', autoClose: false })?.subscribe((data: any) => { 
+      if (data) console.log(data)
+    })
   }
 }
+```
+
+## Configuration
+```typescript
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
+import { provideNotifications } from '@christophhu/ngx-notifications'
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideAnimationsAsync(),
+    provideNotifications({ type: 'info', position: 'top-center', header: '', message: '', autoclose: true, timeout: 15000, max: 5 }),
+    provideZoneChangeDetection({ eventCoalescing: true })
+  ]
+};
 ```

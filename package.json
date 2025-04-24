@@ -1,6 +1,6 @@
 {
   "name": "ngx-notifications",
-  "version": "19.2.0",
+  "version": "19.2.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
     "@christophhu/ngx-github-pages-demo": "^19.2.8",
+    "@christophhu/ngx-notifications": "^19.2.1",
     "@tailwindcss/postcss": "^4.1.4",
     "postcss": "^8.5.3",
     "rxjs": "~7.8.0",
