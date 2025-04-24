@@ -1,12 +1,14 @@
 {
   "name": "ngx-notifications",
-  "version": "0.0.0",
+  "version": "19.2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "preprocess": "ng build ngx-notifications",
+    "publish": "cd dist/ngx-notifications && npm publish --access public"
   },
   "private": true,
   "dependencies": {
@@ -17,7 +19,11 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "@christophhu/ngx-github-pages-demo": "^19.2.8",
+    "@tailwindcss/postcss": "^4.1.4",
+    "postcss": "^8.5.3",
     "rxjs": "~7.8.0",
+    "tailwindcss": "^4.1.4",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

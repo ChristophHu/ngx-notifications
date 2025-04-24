@@ -1,59 +1,78 @@
-# NgxNotifications
+# Ngx-Notifications
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.7.
+## Frameworks and Languages
+<p align="left">
+  <img alt="Static Badge" src="https://img.shields.io/badge/19.2.0-000000?style=for-the-badge&logo=angular&logoColor=white&label=Angular&labelColor=000000"><br>
+  <img alt="Static Badge" src="https://img.shields.io/badge/4.1.4-000000?style=for-the-badge&logo=tailwindcss&logoColor=white&label=Tailwind&labelColor=06B6D4&color=000000"><br>
+  <img alt="Static Badge" src="https://img.shields.io/badge/5.7.2-000000?style=for-the-badge&logo=typescript&logoColor=white&label=Typescript&labelColor=007ACC&color=000000">
+</p>
 
-## Development server
+## Demo
+<p align="center">
+  <a href="https://christophhu.github.io/ngx-notifications"><img src="https://github.com/ChristophHu/ChristophHu/blob/main/assets/img/ngx-notifications.png" width="400" alt="image" /></a>
+</p>
 
-To start a local development server, run:
+## Description
+This Repository is a demo application for the ngx-notifications library. The library adds notifications to your Angular application. It provides a simple API to create notifications with different types (info, success, warning, error) and positions (top-right, top-left, bottom-right, bottom-left). The library is easy to use and can be installed via [npm](https://www.npmjs.com/package/@christophhu/ngx-notifications).
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Installation
+To run this project, you need to have Node.js installed on your machine. Clone the repository and run the following commands:
 
 ```bash
-ng generate --help
+npm i @christophhu/ngx-notifications
 ```
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
+## Use
+### With default toggle
+```html
+<log-mode></log-mode>
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
+### With custom toggle
+```html
+<log-mode>
+  <input type="checkbox" name="log" id="log" (change)="toggleLog()" [checked]="isLogActivated()" class="cursor-pointer">
+</log-mode>
 ```
 
-## Running end-to-end tests
+```typescript
+import { LogDecorator, LogModeComponent, LogService } from '@christophhu/ngx-log-mode'
 
-For end-to-end (e2e) testing, run:
+@Component({
+  ...
+  imports: [
+    LogModeComponent
+  ],
+  providers: [
+    LogService
+  ]
+})
+export class TestComponent {
+  private _logService: LogService
+  
+  constructor(@Inject(LogService) _logService: LogService) {
+    this._logService = _logService
+  }
 
-```bash
-ng e2e
+  // Log-Decorator to log the function call and the result with timestamp
+  @LogDecorator({ logType: 'info', input: false, output: false, timestamp: true })
+
+  toggleLog() {
+    this._logService.toggleLogActivate()
+  }
+  isLogActivated(): boolean {
+    return this._logService.isLogActivated()
+  }
+
+  logThis(param: string): void {
+    LogService.log('TemplateComponent', 'logThis()', ' param: ' + param)
+  }
+  logThis() {
+    LogService.debug('TemplateComponent', 'logDebug()')
+    LogService.info('TemplateComponent', 'logInfo()')
+    LogService.warn('TemplateComponent', 'logWarn()')
+    LogService.error('TemplateComponent', 'logError()')
+    LogService.fatal('TemplateComponent', 'logFatal()')
+  }
+}
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
