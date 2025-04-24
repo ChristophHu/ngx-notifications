@@ -1,9 +1,13 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { PositionType } from '../../models/position.type';
 import { Subject, takeUntil } from 'rxjs';
 import { NotificationsService } from '../../services/notification.service';
 import { Notification } from '../../models/notification.model';
 import { CommonModule } from '@angular/common';
+import { INotificationsOptions } from '../../models/notifications-options';
+import { NGX_NOTIFICATIONS_OPTIONS_TOKEN } from '../../token/ngx-notifications-options-token';
+import { SaveHtmlPipe } from '../../pipes/save-html.pipe';
+import { fadeInRight, fadeOutRight } from '../../animations/fade'
 
 @Component({
   selector: 'notification',
@@ -11,48 +15,35 @@ import { CommonModule } from '@angular/common';
     CommonModule
   ],
   templateUrl: './notification.component.html',
-  styleUrl: './notification.component.sass'
+  styleUrl: './notification.component.sass',
+  providers: [
+    SaveHtmlPipe
+  ],
+  animations: [fadeInRight, fadeOutRight]
 })
 export class NotificationComponent {
-  @Input() position: PositionType = 'top-right'
+  position: PositionType
 
   @Output() public onAdd: EventEmitter<any> = new EventEmitter<any>()
   @Output() public onRemove: EventEmitter<any> = new EventEmitter<any>()
   @Output() public onClear: EventEmitter<boolean> = new EventEmitter<boolean>()
 
   notifications: Array<Notification> = []
-  private _notificationsConfig: any
-  private default_values: Partial<Notification>
+  private _notifications_options: INotificationsOptions
+  // private default_values: Partial<Notification>
 
   destroy$: Subject<boolean> = new Subject<boolean>()
 
-  constructor(private _notificationsService: NotificationsService) {
-    this._notificationsConfig = {
-      position: 'top-right',
-      type: 'info',
-      header: 'Info',
-      message: '',
-      autoclose: true,
-      timeout: 15000,
-      max: 5
-    }
+  constructor(private _notificationsService: NotificationsService, @Inject(NGX_NOTIFICATIONS_OPTIONS_TOKEN) public options: INotificationsOptions) {
 
-    this.default_values = { 
-      type: this._notificationsConfig.type, 
-      header: this._notificationsConfig.header, 
-      message: this._notificationsConfig.message, 
-      autoClose: this._notificationsConfig.autoclose, 
-      timeout: this._notificationsConfig.timeout,
-      response: {}
-    }
+    this._notifications_options = options
 
-    this.position = this._notificationsConfig.position
+    this.position = this._notifications_options.position
     this._notificationsService.get()
     .pipe(
       takeUntil(this.destroy$)
     )
     .subscribe((notification: any) => {
-      console.log('notification:', notification)
       if (!notification) return
 
       switch (notification.action) {
@@ -70,25 +61,24 @@ export class NotificationComponent {
   }
 
   ngOnDestroy(): void {
-    console.log('Notification.ngOnDestroy')
     this.destroy$.next(true)
     this.destroy$.unsubscribe()
   }
 
   add(notification: any) {
-    notification = Object.assign({}, this.default_values, notification)
+    notification = Object.assign({}, this._notifications_options, notification)
 
     let timeout
     const id = this.uuid()
 
-    if (this._notificationsConfig.max && this.notifications.length === this._notificationsConfig.max ) {
+    if (this._notifications_options.max && this.notifications.length === this._notifications_options.max ) {
       this.remove(this.notifications[0].id)
     }
 
     if (notification.autoClose && notification.timeout) {
       timeout = setTimeout(() => {
         this.remove(id)
-      }, notification.timeout || this._notificationsConfig.timeout)
+      }, notification.timeout || this._notifications_options.timeout)
     }
 
     notification = Object.assign({ id: id, timeoutObj: timeout }, notification)
@@ -102,11 +92,9 @@ export class NotificationComponent {
     }
 
     this.notifications.push(notification)
-    console.log('notifications-add:', this.notifications)
   }
 
   remove(id: string) {
-    console.log('remove:', id)
     const notification = this.notifications.find(obj => obj.id === id)
 
     if (notification) {
@@ -124,8 +112,6 @@ export class NotificationComponent {
     }
 
     this.notifications = this.notifications.filter(obj => obj.id !== id)
-    console.log('notifications-remove:', this.notifications)
-
   }
 
   clear() {
