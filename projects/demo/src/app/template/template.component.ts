@@ -1,12 +1,15 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { NotificationComponent, NotificationsService } from '../../../../ngx-notifications/src/public-api';
+import { NotificationComponent, NotificationsService, NotificationType } from '../../../../ngx-notifications/src/public-api';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-template',
   imports: [
     CommonModule,
-    NotificationComponent
+    JsonPipe,
+    NotificationComponent,
+    ReactiveFormsModule
   ],
   templateUrl: './template.component.html',
   styleUrl: './template.component.sass',
@@ -15,10 +18,27 @@ import { NotificationComponent, NotificationsService } from '../../../../ngx-not
   ]
 })
 export class TemplateComponent {
-  private _notificationsService: NotificationsService
 
-  constructor(@Inject(NotificationsService) _notificationsService: NotificationsService) {
-    this._notificationsService = _notificationsService
+  notificationForm: FormGroup
+  types: NotificationType[] = ['success', 'error', 'warning', 'info', 'request']
+
+  constructor(private _notificationsService: NotificationsService) {
+    this.notificationForm = new FormGroup({
+      type: new FormControl(''),
+      header: new FormControl(''),
+      message: new FormControl(''),
+      autoClose: new FormControl(false)
+    })
+  }
+
+  createNotification() {
+    this._notificationsService.open(this.notificationForm.value)?.subscribe((data: any) => { 
+      if (data == true) console.log('result: ', data)
+    })
+  }
+
+  get() {
+    return this._notificationsService.get()
   }
 
   error() {

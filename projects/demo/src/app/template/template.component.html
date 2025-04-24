@@ -6,3 +6,41 @@
     <button (click)="success()" class="flex h-12 p-2 w-32 items-center justify-center bg-green-200 text-black rounded">Success</button>
     <button (click)="warning()" class="flex h-12 p-2 w-32 items-center justify-center bg-yellow-200 text-black rounded">Warning</button>
 </div>
+
+<div class="grid grid-cols-2 divide-x-2 divide-borderline">
+    <div class="p-2 text-dark" [formGroup]="notificationForm">
+        <h2 class="mb-2">Playground</h2>
+        <div class="nxt_input flex flex-col">
+            <label class="nxt_input_label my-2 mr-3 text-sm leading-none">Typ</label>
+            <select class="nxt_input_field custom-select" formControlName="type">
+                <option value="">Typ wählen...</option>
+                <option *ngFor="let type of types" [ngValue]="type">{{ type }}</option>
+            </select>
+        </div>
+        <div class="nxt_input flex flex-col w-full mt-2">
+            <label class="nxt_input_label my-2 text-sm leading-none">Titel</label>
+            <div class="relative mt-1 flex items-center">
+                <input type="text" formControlName="header" id="header" class="nxt_input_field w-full p-3 border rounded focus:outline-none text-sm font-medium leading-none disabled:pointer-events-none" placeholder="Titel" />
+            </div>
+        </div>
+        <div class="nxt_input flex flex-col w-full mt-2">
+            <label class="nxt_input_label my-2 text-sm leading-none">Beschreibung</label>
+            <div class="nxt_input_area w-full mt-1 border border-borderline rounded">
+                <div class="relative h-32 w-full">
+                    <textarea formControlName="message" id="message" class="nxt_input_area absolute inset-0 pt-3 px-3 bg-transparent text-sm font-medium leading-none rounded scrollbar-hide" cols="30" rows="5" placeholder="Beschreibung"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="nxt_checkbox flex items-center w-full mt-2">
+            <div class="my-2 mr-2 bg-white dark:bg-gray-800 rounded-sm w-5 h-5 flex flex-shrink-0 justify-center items-center relative">
+                <input type="checkbox" formControlName="autoClose" id="autoClose" class="nxt_checkbox_field w-full h-full focus:outline-none cursor-pointer" [checked]="autoclose" #autoclose />
+            </div>
+            <label class="nxt_checkbox_label text-sm leading-none">autoClose (20 Sec.)</label>
+        </div>
+        <button type="submit" class="p-2 bg-accent text-white rounded shadow-lg" (click)="createNotification()">Submit</button>
+    </div>
+    <div class="p-2 text-dark">
+        <h2 class="mb-2">Code</h2>
+        <pre class="bg-primary p-2 rounded-lg">{{ notificationForm.value | json }}</pre>
+    </div>
+</div>
